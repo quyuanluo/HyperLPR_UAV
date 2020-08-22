@@ -23,7 +23,30 @@ Pillow==7.2.0
 ##### Flask==1.1.2 
 ##### requests==2.24.0
 
-### Redis 相关配置，设置远程Redis服务可以被访问（https://www.jianshu.com/p/0ed7e88325dd）
+## Redis 相关配置
+### 安装Python版的redis
+
+pip install redis
+
+### 下载Redis服务器包
+$ sudo apt-get install redis-server
+#### 启动 Redis
+$ redis-server
+#### 查看 redis 是否启动？
+$ redis-cli
+#### 以上命令将打开以下终端：
+
+redis 127.0.0.1:6379>
+
+127.0.0.1 是本机 IP ，6379 是 redis 服务端口。现在我们输入 PING 命令。
+
+redis 127.0.0.1:6379> ping
+
+PONG
+
+#### 以上说明我们已经成功安装了redis。
+
+### 设置远程Redis服务可以被访问（https://www.jianshu.com/p/0ed7e88325dd）
 ##### 通常来说，生产环境下的Redis服务器只设置为仅本机访问（Redis默认也只允许本机访问）。有时候我们也许需要使Redi能被远程访问。
 #### 1 修改Redis配置文件/etc/redis/redis.conf，找到bind那行配置（Ubuntu系统是这个路径）
 vim /etc/redis/redis.conf
