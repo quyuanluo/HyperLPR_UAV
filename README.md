@@ -55,3 +55,7 @@ requests==2.24.0
 ### 5.将项目推送到远程仓库
 
 #### git push -u origin master
+
+### 常用命令 
+#### 取回远程仓库的变化，并与本地分支合并
+##### git pull
