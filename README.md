@@ -3,7 +3,7 @@
 ### Ubuntu 16.04 LTS 
 ### Python==3.5.2
 
-#### 图像处理程序所需要的包为:
+### 图像处理程序所需要的包为:
 
 tensorflow==1.13.1
 
@@ -20,9 +20,31 @@ Scikit-image==0.15.0
 Pillow==7.2.0
 
 ### 用于RESTful API的包
-Flask==1.1.2 
+##### Flask==1.1.2 
+##### requests==2.24.0
 
-requests==2.24.0
+### Redis 相关配置，设置远程Redis服务可以被访问（https://www.jianshu.com/p/0ed7e88325dd）
+##### 通常来说，生产环境下的Redis服务器只设置为仅本机访问（Redis默认也只允许本机访问）。有时候我们也许需要使Redi能被远程访问。
+#### 1 修改Redis配置文件/etc/redis/redis.conf，找到bind那行配置（Ubuntu系统是这个路径）
+vim /etc/redis/redis.conf
+#### 2 去掉#注释并改为：
+bind 0.0.0.0
+
+或者指定特定的IP才可以访问，可以一次指定多个，如 bind 192.10.1.1 192.10.1.2 192.10.1.3
+#### 3 指定配置文件然后重启Redis服务：
+sudo redis-server /etc/redis/redis.conf
+#### 4 重启 redis 服务：
+sudo service redis-server restart
+### 远程连接
+#### 配置好Redis服务并重启服务后。就可以使用客户端远程连接Redis服务了。命令格式如下：
+redis-cli -h {redis_host} -p {redis_port}
+
+#### 其中{redis_host}就是远程的Redis服务所在服务器地址，{redis_port}就是Redis服务端口（Redis默认端口是6379）。例如：
+ $ redis-cli -h 120.120.10.10 -p 6379
+ 
+redis>ping
+
+PONG
 
 # 配置虚拟环境（可选项）
 ### virtualenv创建虚拟环境，主要用于在一台电脑上需要安装不同版本的python虚拟环境来做项目, virtualenv就是用来为一个项目创建一套可以隔离的Python运行环境。
