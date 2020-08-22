@@ -53,6 +53,10 @@ vim /etc/redis/redis.conf
 #### 2 去掉#注释并改为：
 bind 0.0.0.0
 
+将保护模式改为no
+
+protected-mode no (高级的Redis版本中没有这个)
+
 或者指定特定的IP才可以访问，可以一次指定多个，如 bind 192.10.1.1 192.10.1.2 192.10.1.3
 #### 3 指定配置文件然后重启Redis服务：
 sudo redis-server /etc/redis/redis.conf
