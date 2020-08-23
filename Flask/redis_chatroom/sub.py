@@ -3,7 +3,7 @@ import redis
 import json
 
 config = {
-    'host': '127.0.0.1',
+    'host': '10.0.0.120',
     'port': 6379,
     'db': 0,
 }

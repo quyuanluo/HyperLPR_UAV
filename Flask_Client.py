@@ -1,39 +1,52 @@
+# post get 方法的返回如果用jsonify打包数据，则接收时需要用result.json()
+# 将JSON type转化成 dic type
+
+
 import requests
 import time
 import json
+import threading
 
-CLIENT_NAME='LAPTOP'
+NODE_NAME='Laptop'
 IMAGE_FOLDER='images_lib/1/'
-EDGE_API_URL='http://10.0.0.120:5000'
-ImgProc_URL=EDGE_API_URL+'/device/request_image'
-MsgReq_URL=EDGE_API_URL+'/device/request_message'
+SERVER_URL={'Laptop':'http://10.0.0.214:5000',
+              'EdgeNode12':'http://10.0.0.223:5000',
+              'EdgeNode14':'http://10.0.0.70:5000',
+              'Raspberry':'http://10.0.0.120:5000'}
+send_image_path='/device/send_image'
+send_info_path='/device/send_info'
+get_info_path='/device/get_info'
 
 
-
-def send_message(msg):   
-    user_info = {'client_name': CLIENT_NAME,'msg_content':msg}  
+def get_info(server_url,msg):
+    user_info = {'client_name': NODE_NAME,'content':msg}  
     headers = {'content-type': 'application/json'}  
-    resp_message = requests.post(MsgReq_URL, json=user_info, headers=headers)   
-    return resp_message.json()
+    result=requests.post(server_url+get_info_path,json=user_info, headers=headers) 
+    return result.json()
 
+def send_info(server_url,msg):   
+    user_info = {'client_name': NODE_NAME,'content':msg}  
+    headers = {'content-type': 'application/json'}  
+    result = requests.post(server_url+send_info_path, json=user_info, headers=headers)   
+    return result.json()
 
-
-def send_image(img_name):
+def send_image(server_url,img_name):
     image_path=IMAGE_FOLDER+img_name
-    new_name=CLIENT_NAME+'_'+img_name
+    new_name=NODE_NAME+'_'+img_name
     files = {"content": (new_name,open(image_path, 'rb'))}
-    resp_img = requests.post(ImgProc_URL,files=files)
-    # change JSON type to dic type
+    resp_img = requests.post(server_url+send_image_path,files=files)
     return resp_img.json()
-    
-    
 
-while True:
-    sent_msg=[1,2,3,4]
-    return_msg=send_message(sent_msg)
-    print(return_msg)
-    file_name=input("input what you want to send >>>>>> ")
-    proc_results=send_image(file_name)
-    print("results:",proc_results['proc_results'])
-    print('processing time:', proc_results['proc_time'])
-    time.sleep(1) 
+
+    
+if __name__ == '__main__':
+    server_url=SERVER_URL['Laptop']
+    while True:
+        msg=input("【System Warning】input the message you want to send >>>>>> ")
+        result=send_info(server_url,msg)
+        print('【{0}】从服务器获得反馈信息为：{1}'.format(NODE_NAME,result))
+        result=get_info(server_url,"get information test")
+        print('【{0}】从服务器获得刚才发送的信息为：{1}'.format(NODE_NAME,result))
+        file_name=input("input the image name you want to send >>>>>> ")
+        proc_results=send_image(server_url,file_name)
+        print('【Client】收到服务器处理结果为：', proc_results)
