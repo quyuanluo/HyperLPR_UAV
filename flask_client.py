@@ -10,8 +10,8 @@ import threading
 NODE_NAME='Laptop'
 IMAGE_FOLDER='images_lib/1/'
 SERVER_URL={'Laptop':'http://10.0.0.214:5000',
-              'EdgeNode12':'http://10.0.0.223:5000',
-              'EdgeNode14':'http://10.0.0.70:5000',
+              'EdgeNode14':'http://10.0.0.223:5000',
+              'EdgeNode12':'http://10.0.0.70:5000',
               'Raspberry':'http://10.0.0.120:5000'}
 send_image_path='/device/send_image'
 send_info_path='/device/send_info'
@@ -40,13 +40,15 @@ def send_image(server_url,img_name):
 
     
 if __name__ == '__main__':
-    server_url=SERVER_URL['Laptop']
     while True:
+        server_name=input("【System Warning】choose a server: EdgeNode12 or EdgeNode14?>>>>>>")
+        #server_name='EdgeNode14'
+        server_url=SERVER_URL[server_name]
         msg=input("【System Warning】input the message you want to send >>>>>> ")
         result=send_info(server_url,msg)
-        print('【{0}】从服务器获得反馈信息为：{1}'.format(NODE_NAME,result))
+        print(f'【{NODE_NAME}】从服务器[{server_name}]获得反馈信息为：{result}')
         result=get_info(server_url,"get information test")
-        print('【{0}】从服务器获得刚才发送的信息为：{1}'.format(NODE_NAME,result))
-        file_name=input("input the image name you want to send >>>>>> ")
+        print(f'【{NODE_NAME}】从服务器[{server_name}]获得刚才发送的信息为：{result}')
+        file_name=input("【System Warning】input the image name you want to send >>>>>> ")
         proc_results=send_image(server_url,file_name)
-        print('【Client】收到服务器处理结果为：', proc_results)
+        print(f'【{NODE_NAME}】收到服务器[{server_name}]处理结果为：{proc_results}')
