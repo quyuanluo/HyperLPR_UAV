@@ -46,9 +46,9 @@ if __name__ == '__main__':
         server_url=SERVER_URL[server_name]
         msg=input("【System Warning】input the message you want to send >>>>>> ")
         result=send_info(server_url,msg)
-        print(f'【{NODE_NAME}】从服务器[{server_name}]获得反馈信息为：{result}')
+        print('【{}】从服务器[{}]获得反馈信息为：{}'.format(NODE_NAME,server_name,result))
         result=get_info(server_url,"get information test")
-        print(f'【{NODE_NAME}】从服务器[{server_name}]获得刚才发送的信息为：{result}')
+        print('【{}】从服务器[{}]获得刚才发送的信息为：{}'.format(NODE_NAME,server_name,result))
         file_name=input("【System Warning】input the image name you want to send >>>>>> ")
         proc_results=send_image(server_url,file_name)
-        print(f'【{NODE_NAME}】收到服务器[{server_name}]处理结果为：{proc_results}')
+        print('【{}】收到服务器[{}]处理结果为：{}'.format(NODE_NAME,server_name,proc_results))

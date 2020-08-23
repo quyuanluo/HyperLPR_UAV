@@ -45,7 +45,7 @@ def index():
 def get_info():
     global possibility
     msg_data=request.json
-    print(f"【{NODE_NAME}】收到[{msg_data['client_name']}]的消息：{msg_data['content']}")
+    ("【{}】收到[{}]的消息：{}".format(NODE_NAME,msg_data['client_name'],msg_data['content']))
     return jsonify(possibility)
 
 @app.route('/device/send_info', methods=['POST'])
@@ -54,12 +54,12 @@ def send_info():
     msg_data=request.json
     # 先判断是否为其他服务器转发过来信息
     if 'relay_server' in msg_data:
-        print(f"【{NODE_NAME}】收到[{msg_data['relay_server']}]转发自[{msg_data['client_name']}]的消息：{msg_data['content']}")
+        print("【{}】收到[{}]转发自[{}]的消息：{}".format(NODE_NAME,msg_data['relay_server'],msg_data['client_name'],msg_data['content']))
     else: # 如果不是则转发消息
-        print(f"【{NODE_NAME}】收到[{msg_data['client_name']}]的消息：{msg_data['content']}")
-        print(f"【{NODE_NAME}】正转发[{msg_data['client_name']}]的消息给[{Destination_Node}]......")
+        print("【{}】收到[{}]的消息：{}".format(NODE_NAME,msg_data['client_name'],msg_data['content']))
+        print("【{}】正转发[{}]的消息给[{}]......".format(NODE_NAME,msg_data['client_name'],Destination_Node))
         result=relay_info(msg_data)
-        print(f"【{Destination_Node}】{result}")
+        print("【{}】{}".format(Destination_Node,result))
     possibility=msg_data['content']
     return jsonify('已成功收到消息！')
 
@@ -72,9 +72,13 @@ def process_image():
     file_path=os.path.join(app.root_path,RECV_FOLDER,image_file.filename)
     image_file.save(file_path)
     file_size = os.stat(file_path).st_size
-    results,time=ImageProcess(file_path)
     print('file size: {0:.0f} KB'.format(file_size/1024))
-    return jsonify({'proc_results':results,'proc_time':time})
+    if os.path.splitext(image_file.filename)[-1] in [".jpg",".png"]: # 如果为图像文件
+        results,time=ImageProcess(file_path)
+        results_info={'proc_results':results,'proc_time':time}
+    else:
+        results_info="已成功收到文件！"
+    return jsonify(results_info)
 
 if __name__ == '__main__':
     possibility="Hello, this is the initial value of possibility"
