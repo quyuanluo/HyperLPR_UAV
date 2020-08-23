@@ -114,4 +114,4 @@ git config core.ignorecase false
 
 修改完成后，当你修改文件名大小写时，Git 就会提示有提交信息了
 ##### 方法二：从git 本地仓库删除此文件,然后添加再提交
-##### 方法三：
+##### 方法三：git mv oldfile newfile
