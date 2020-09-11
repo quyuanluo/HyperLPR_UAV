@@ -10,9 +10,6 @@ import redis
 import threading
 import requests
 
-RECV_FOLDER='FileRecv'
-NODE_NAME='Laptop' # 本节点名称
-Destination_Node='EdgeNode12' #目的服务器节点名称
 SERVER_URL={'Laptop':'http://10.0.0.214:5000',
               'EdgeNode14':'http://10.0.0.223:5000',
               'EdgeNode12':'http://10.0.0.70:5000',
@@ -21,6 +18,10 @@ send_image_path='/device/send_image'
 send_info_path='/device/send_info'
 get_info_path='/device/get_info'
 
+RECV_FOLDER='FileRecv'
+NODE_NAME='Laptop' # 本节点名称
+Destination_Node='Raspberry' #目的服务器节点名称
+dest_url=SERVER_URL[Destination_Node]+send_info_path
 
 
 
@@ -33,7 +34,7 @@ app = Flask(__name__)
 def relay_info(msg_data):  
     user_info = {'client_name': msg_data['client_name'],'content':msg_data['content'],'relay_server':NODE_NAME}  
     headers = {'content-type': 'application/json'}  
-    result=requests.post('http://10.0.0.70:5000/device/send_info', json=user_info, headers=headers)
+    result=requests.post(dest_url, json=user_info, headers=headers)
     return result.json()
 
 @app.route('/')

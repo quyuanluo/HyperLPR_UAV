@@ -6,7 +6,7 @@ import HyperLPRLite as pr
 from cv2 import cv2
 import numpy as np
 
-SEND_FOLDER='images_lib/2/'
+SEND_FOLDER='images_lib/6/'
 
 
 def ImageProcess(image_path):
@@ -36,13 +36,27 @@ def ImageProcess(image_path):
     return proc_results_without_pos,t
 
 
-if __name__ == '__main__':
+
+if __name__ == '__main__': 
     # 在主函数中，先打开图像处理模型，然后可以不断输入图像进行处理
     # 不要每次需要图像处理时在打开，这样会报错，而且浪费时间
-    model = pr.LPR("model/cascade.xml", "model/model12.h5", "model/ocr_plate_all_gru.h5") 
-    while True:
-        file_name=input("file name you want to process:")
+    # model = pr.LPR("model/cascade.xml", "model/model12.h5", "model/ocr_plate_all_gru.h5") 
+    # while True:
+    time_set=[]
+    posibility_set=[]
+    files=os.listdir(SEND_FOLDER)
+    for file_name in files:
+        #file_name=input("file name you want to process:")
         results,proc_time=ImageProcess(SEND_FOLDER+file_name)
-        print(results)
-        print(proc_time)
+        if len(results):
+            time_set.append(proc_time)
+            posibility_set.append(results[-1][-1])
+
+    time_set=np.array(time_set)  #将list转化为numpy
+    posibility_set=np.array(posibility_set)
+    time_set=time_set*1000  # 时间转化为秒
+
+    # 将两个列表合二为一个numpy数组
+    results_data=np.c_[time_set,posibility_set]
+    np.savetxt('results_data.cvs',results_data,delimiter=',')
 
