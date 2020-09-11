@@ -45,8 +45,11 @@ if __name__ == '__main__':
     time_set=[]
     posibility_set=[]
     files=os.listdir(SEND_FOLDER)
+    i=0
     for file_name in files:
         #file_name=input("file name you want to process:")
+        print("image******{}*****".format(i))
+        i+=1
         results,proc_time=ImageProcess(SEND_FOLDER+file_name)
         if len(results):
             time_set.append(proc_time)
