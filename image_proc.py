@@ -5,12 +5,13 @@ from PIL import Image
 import HyperLPRLite as pr
 from cv2 import cv2
 import numpy as np
+import csv
 
 SEND_FOLDER='images_lib/6/'
 
 
 def ImageProcess(image_path):
-    model = pr.LPR("model/cascade.xml","model/model12.h5","model/ocr_plate_all_gru.h5")
+    # model = pr.LPR("model/cascade.xml","model/model12.h5","model/ocr_plate_all_gru.h5")
     grr = cv2.imread(image_path)
     print( "[Server] 神经网络正在处理图片.......")
     
@@ -40,7 +41,7 @@ def ImageProcess(image_path):
 if __name__ == '__main__': 
     # 在主函数中，先打开图像处理模型，然后可以不断输入图像进行处理
     # 不要每次需要图像处理时在打开，这样会报错，而且浪费时间
-    # model = pr.LPR("model/cascade.xml", "model/model12.h5", "model/ocr_plate_all_gru.h5") 
+    model = pr.LPR("model/cascade.xml", "model/model12.h5", "model/ocr_plate_all_gru.h5") 
     # while True:
     time_set=[]
     posibility_set=[]
@@ -52,14 +53,19 @@ if __name__ == '__main__':
         i+=1
         results,proc_time=ImageProcess(SEND_FOLDER+file_name)
         if len(results):
-            time_set.append(proc_time)
-            posibility_set.append(results[-1][-1])
+            # time_set.append(proc_time)
+            # posibility_set.append(results[-1][-1])
+            fields=[proc_time,results[-1][-1]]
+            with open(r'results_data.csv', 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(fields)
+                f.close()
 
-    time_set=np.array(time_set)  #将list转化为numpy
-    posibility_set=np.array(posibility_set)
-    time_set=time_set*1000  # 时间转化为秒
+    # time_set=np.array(time_set)  #将list转化为numpy
+    # posibility_set=np.array(posibility_set)
+    # time_set=time_set*1000  # 时间转化为秒
 
-    # 将两个列表合二为一个numpy数组
-    results_data=np.c_[time_set,posibility_set]
-    np.savetxt('results_data.cvs',results_data,delimiter=',')
+    # # 将两个列表合二为一个numpy数组
+    # results_data=np.c_[time_set,posibility_set]
+    # np.savetxt('results_data.cvs',results_data,delimiter=',')
 
